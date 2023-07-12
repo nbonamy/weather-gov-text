@@ -1,0 +1,31 @@
+{
+  "name": "weather-gov-text",
+  "version": "1.0.0",
+  "description": "Generates text weather updates from weather.gov API",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbonamy/weather-gov-text.git"
+  },
+  "keywords": [
+    "weather",
+    "api",
+    "tts"
+  ],
+  "author": "Nicolas Bonamy",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/nbonamy/weather-gov-text/issues"
+  },
+  "homepage": "https://github.com/nbonamy/weather-gov-text#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mdns": "^2.7.2",
+    "node-fetch": "^3.3.1",
+    "portfinder": "^1.0.32",
+    "yaml": "^2.3.1"
+  }
+}
