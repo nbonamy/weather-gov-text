@@ -53,23 +53,15 @@ module.exports = class {
     console.log(`Extracting daily forecast for day=${day}`)
 
     // extract forecast
-    let forecastText = ''
     for (let period of forecast.properties.periods) {
       if (period.name.toLocaleLowerCase() == day) {
-        forecastText = this._genForecastText(period)
-        break
+        return this._genPayload(period)
       }
     }
 
     // if not found
-    if (forecastText == '') {
-      throw new Error(`No forecast found for ${day}`)
-    }
-    
-    return {
-      text: forecastText,
-      //forecast: forecast
-    }
+    throw new Error(`No forecast found for ${day}`)
+
   }
 
   async getHourlyForecast(hour) {
@@ -115,22 +107,26 @@ module.exports = class {
     console.log(`Extracting hourly forecast for day=${day} hour=${hour}`)
 
     // extract forecast
-    let forecastText = ''
     for (let period of forecast.properties.periods) {
       if (period.startTime.includes(`${day}T${hour}:`)) {
-        forecastText = this._genForecastText(period)
-        break
+        return this._genPayload(period)
       }
     }
 
     // if not found
-    if (forecastText == '') {
-      throw new Error(`No forecast found for ${hour}`)
-    }
+    throw new Error(`No forecast found for ${hour}`)
 
+  }
+
+  _genPayload(period) {
+
+    // text
+    let forecastText = this._genForecastText(period)    
+
+    // now the payload
     return {
       text: forecastText,
-      //forecast: forecast
+      forecast: period,
     }
 
   }
@@ -145,17 +141,17 @@ module.exports = class {
 
     // temperature
     if (this._settings.parts?.temperature !== false && period.temperature) {
-      text += ` Temperature: ${this._genTemperatureText(period)}. `
+      text += ` Temperature: ${this._genTemperatureText(period)}.`
     }
 
     // chance of precipitation
     if (this._settings.parts?.precipitation !== false && period.probabilityOfPrecipitation) {
-      text += ` Chance of precipitation: ${period.probabilityOfPrecipitation.value}%. `
+      text += ` Chance of precipitation: ${period.probabilityOfPrecipitation.value||0}%.`
     }
 
     // wind speed
     if (this._settings.parts?.wind !== false && period.windSpeed) {
-      text += ` Wind speed: ${period.windSpeed}. `
+      text += ` Wind speed: ${period.windSpeed}.`
     }
 
     // done
